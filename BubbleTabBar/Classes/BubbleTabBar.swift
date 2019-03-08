@@ -37,6 +37,17 @@ open class BubbleTabBar: UITabBar {
         }
     }
     
+    @available(iOS 10.0, *)
+    open override var unselectedItemTintColor: UIColor? {
+        didSet {
+            buttons.forEach { button in
+                if (button.item as? CBTabBarItem)?.unselectedTintColor == nil {
+                    button.unselectedTintColor = unselectedItemTintColor
+                }
+            }
+        }
+    }
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -130,6 +141,9 @@ open class BubbleTabBar: UITabBar {
         button.setContentHuggingPriority(.required, for: .horizontal)
         if (button.item as? CBTabBarItem)?.tintColor == nil {
             button.tintColor = tintColor
+        }
+        if (button.item as? CBTabBarItem)?.unselectedTintColor == nil {
+            button.unselectedTintColor = unselectedItemTintColor
         }
         button.addTarget(self, action: #selector(btnPressed), for: .touchUpInside)
         if selectedItem != nil && item === selectedItem {

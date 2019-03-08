@@ -10,6 +10,7 @@ import UIKit
 
 public class CBTabBarItem: UITabBarItem {
     @IBInspectable public var tintColor: UIColor?
+    @IBInspectable public var unselectedTintColor: UIColor?
 }
 
 public class CBTabBarButton: UIControl {
@@ -70,6 +71,12 @@ public class CBTabBarButton: UIControl {
             tabBg.backgroundColor = tintColor.withAlphaComponent(0.2)
         }
     }
+    
+    public var unselectedTintColor: UIColor? {
+        didSet {
+            tabImage.tintColor = unselectedTintColor
+        }
+    }
 
     private var tabImage = UIImageView()
     private var tabLabel = UILabel()
@@ -124,8 +131,8 @@ public class CBTabBarButton: UIControl {
     }
     
     private func fold(animationDuration duration: Double = 0.0) {
-        unfoldedConstraints.forEach{ $0.isActive = false }
-        foldedConstraints.forEach{ $0.isActive = true }
+        unfoldedConstraints.forEach { $0.isActive = false }
+        foldedConstraints.forEach { $0.isActive = true }
         UIView.animate(withDuration: duration) {
             self.tabBg.alpha = 0.0
         }
@@ -133,9 +140,12 @@ public class CBTabBarButton: UIControl {
             self.tabLabel.alpha = 0.0
         }
         UIView.transition(with: tabImage, duration: duration, options: [.transitionCrossDissolve], animations: {
-            self.tabImage.tintColor = .black
+            if #available(iOS 10.0, *) {
+                self.tabImage.tintColor = self.unselectedTintColor ?? .black
+            } else {
+                self.tabImage.tintColor = .black
+            }
         }, completion: nil)
-        
     }
     
     private func unfold(animationDuration duration: Double = 0.0) {

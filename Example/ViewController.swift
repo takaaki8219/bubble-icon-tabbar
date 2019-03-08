@@ -31,6 +31,9 @@ class ViewController: UIViewController {
 
         tabBarController.viewControllers = [eventsVC, searchVC, activityVC, settingsVC]
         tabBarController.tabBar.tintColor = #colorLiteral(red: 0.1579992771, green: 0.1818160117, blue: 0.5072338581, alpha: 1)
+        if #available(iOS 10.0, *) {
+            tabBarController.tabBar.unselectedItemTintColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        }
         self.navigationController?.pushViewController(tabBarController, animated: true)
     }
 
